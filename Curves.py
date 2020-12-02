@@ -40,7 +40,7 @@ def graph(xP, yP, t, y, coef,critY,critX):
     plt.ylim(yb-50, ya+50)
     plt.plot(t, y, color = "red")
     der = coorDer(np.polyder(coef),t)
-    plt.plot(t, deriv(coef, t))
+    #plt.plot(t, der)
     plt.scatter(critX['max'], critY['max'], label = 'Máximo')
     plt.scatter(critX['min'], critY['min'], label = 'Mínimo')
     c1 = f"{round(critX['max'],2)}, {round(critY['max'],2)}"
@@ -126,7 +126,6 @@ def K(t,coef):
     coefD = np.polyder(coef)
     secondY = secondD(coefD,t)
     derivY = deriv(coef,t)
-    st.text(coefD)
     K = []
     for i in range(len(t)):
         K.append(np.abs(secondY[i])/(1 + derivY[i]**2)**(3/2))
@@ -140,16 +139,14 @@ def Kcheck(K,y,t):
             critZone['x'].append(t[i])
     return critZone
 
-'''
-untested anim code
-def anim(xP,yP,t,y,coef):
+def anim(xP,yP,t,y,coef,critY):
     fig, ax = plt.subplots()
     ln, = plt.plot([],[], 'ro')
     ax.plot(t,y)
 
     def init():
         ax.set_xlim(xP[0],xP[3])
-        ax.set_ylim(xP[0],yP[3])
+        ax.set_ylim(critY['min']-50,critY['max']+50)
         return ln
 
     def update(frame):
@@ -158,5 +155,5 @@ def anim(xP,yP,t,y,coef):
         ln.set_data(frame, coor(coef,frame))
 
     ani = FuncAnimation(fig,update, frames = t, init_func = init, blit = False)
-    ani.save("animation.gif", writer = "imagemagik", fps = 60)
-'''
+    
+    ani.save("animation.gif", writer = "imagemagick", fps = 60)

@@ -2,15 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 import Curves
-
+import base64
 
 def main():
     xP, yP, t, y, coef = Points() 
     critY, critX = Curves.getCrit(coef,t,Curves.deriv(coef,t),y)
-    st.write(f"Función: ${round(coef[0],10)}x^3{round(coef[1],10)}x^2{round(coef[1],10)}x{round(coef[1],10)}$")
+    st.write(f"Función: ${round(coef[0],10)}x^3{round(coef[1],10)}x^2+{round(coef[2],10)}x+{round(coef[3],10)}$")
     Curves.graph(xP, yP, t, y, coef,critY,critX)
     tangent(xP, yP, t, coef, y,critY,critX)
-
+    animate(xP,yP,t,y,coef,critY)
 
 def Points():
     x1 = st.number_input("x1", value=100)
@@ -42,5 +42,14 @@ def critZone(t,y,coef):
     K = Curves.K(t,coef)
     YcritZ = Curves.Kcheck(K,y,t)
     return YcritZ
+
+def animate(xP,yP,t,y,coef,critY):
+    Curves.anim(xP,yP,t,y,coef,critY)
+    file = open("animation.gif", "rb")
+    cont = file.read()
+    data_url = base64.b64encode(cont).decode("utf-8")
+    file.close()
+    st.markdown( f'<img src="data:image/gif;base64,{data_url}" alt="animation gif">',
+    unsafe_allow_html=True,)
 
 main()
