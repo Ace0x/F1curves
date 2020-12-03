@@ -14,7 +14,7 @@ def main():
     animate(xP,t,y,coef,critY)
     if type(tangenCritz) != int:
         driftAnim(tangenCritz, xP, t, y, coef, critY,derrapeY,derrapeX)
-
+        Curves.graphV(tangenCritz,xP,t,y,coef,critY,derrapeY,derrapeX)
 def Points():
     x1 = st.number_input("x1", value=100)
     y1 = st.number_input("y1", value=1700)

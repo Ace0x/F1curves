@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import streamlit as st
 from matplotlib.animation import FuncAnimation
+import random
 
 def findY(coef, t):
     return coef[0] * t ** 3 + coef[1] * t ** 2 + coef[2] * t + coef[3]
@@ -180,7 +181,29 @@ def anim(xP,t,y,coef,critY):
     ani = FuncAnimation(fig,update, frames = t, init_func = init, blit = False)
     ani.save("animation.gif", writer = "imagemagick", fps = 60)
 
-def find_nearest(array, value):
+def find_nearest(array, value): #https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     return idx
+
+def graphV(tangenCritz,xP,t,y,coef,critY,derrapeY,derrapeX):
+    fig = plt.figure(figsize = (7,7))
+    plt.grid()
+    vmaxC = 114
+    vmax = 320
+    vx1 = [0,610,1400]
+    vy1 = [vmax,vmaxC,vmax]
+    cov1 = np.polyfit(vx1,vy1,2)
+    vx2 = [1400,2090,2600]
+    vy2 = [vmax,vmaxC,vmax]
+    cov2 = np.polyfit(vx2,vy2,2)
+    y1 = random.randint(-20,20) + (cov1[0]*t**2 + cov1[1] * t + cov1[2])
+    y2 = random.randint(-20,20) + (cov2[0]*t**2 + cov2[1] * t + cov2[2])
+    y1 = np.split(y1,2)[0]
+    y2 = np.split(y2,2)[1]
+    yf = np.append(y1,y2)
+    plt.plot(t,yf)
+    plt.ylabel("m/s")
+    plt.xlabel("X")
+    plt.title("Velocidad vs Desplazamiento(x)")
+    st.pyplot(plt)
