@@ -139,7 +139,32 @@ def Kcheck(K,y,t):
             critZone['x'].append(t[i])
     return critZone
 
-def anim(xP,yP,t,y,coef,critY):
+def animDrift(tangenCritz, xP,t,y,coef,critY,derrapeY,derrapeX):
+    fig, ax = plt.subplots()
+    ln, = plt.plot([],[], 'ro')
+    ax.plot(t,y)
+
+    def tanPoint(x):
+        curv = np.polyder(coef)
+        m  = findYt(curv,derrapeX)
+        b = derrapeY - m *derrapeX
+        return m * x + b
+    def init():
+        ax.set_xlim(xP[0], xP[3])
+        if tangenCritz[0] > 1700:
+            ax.set_ylim(0, tangenCritz[0] + 1000)
+        else:
+            ax.set_ylim(tangenCritz[0] - 1000, critY['max'])
+        return ln
+    def update(frame):
+        if frame < derrapeX:
+            ln.set_data(frame, coor(coef,frame))
+        else:
+            ln.set_data(frame,tanPoint(frame))
+    ani = FuncAnimation(fig,update, frames = t , init_func = init, blit = False)
+    ani.save("drift_animation.gif", writer = "imagemagick", fps = 60)
+
+def anim(xP,t,y,coef,critY):
     fig, ax = plt.subplots()
     ln, = plt.plot([],[], 'ro')
     ax.plot(t,y)
@@ -150,10 +175,12 @@ def anim(xP,yP,t,y,coef,critY):
         return ln
 
     def update(frame):
-        #xdata.append(frame)
-        #ydata.append()#function np.sin(frame)
         ln.set_data(frame, coor(coef,frame))
 
     ani = FuncAnimation(fig,update, frames = t, init_func = init, blit = False)
-    
     ani.save("animation.gif", writer = "imagemagick", fps = 60)
+
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx
