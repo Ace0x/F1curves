@@ -202,8 +202,19 @@ def graphV(tangenCritz,xP,t,y,coef,critY,derrapeY,derrapeX):
     y1 = np.split(y1,2)[0]
     y2 = np.split(y2,2)[1]
     yf = np.append(y1,y2)
+    st.text("velocidad")
+    st.write(yf)
     plt.plot(t,yf)
     plt.ylabel("m/s")
     plt.xlabel("X")
     plt.title("Velocidad vs Desplazamiento(x)")
     st.pyplot(plt)
+    plt.clf()
+    energy = 0.5 * 740 *(yf/3.6) ** 2
+    st.text("Energía cinética")
+    st.write(energy)
+    plt.plot(t,energy)
+    plt.title("Energía cinética vs Desplazamiento(x)")
+    st.pyplot(plt)
+    st.text("posición(x)")
+    st.write(t)
